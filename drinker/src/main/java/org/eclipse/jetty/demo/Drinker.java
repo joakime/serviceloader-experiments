@@ -22,8 +22,10 @@ public class Drinker
         Optional<BarService> service = ServiceLoader.load(BarService.class).stream()
             .map((provider) ->
             {
+                // attempt to load service
                 try
                 {
+                    // will either return a service, throw an error, or return null
                     return provider.get();
                 }
                 catch (ServiceConfigurationError error)
