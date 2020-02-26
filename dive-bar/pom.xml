@@ -14,5 +14,10 @@
   <packaging>jar</packaging>
 
   <dependencies>
+    <dependency>
+      <groupId>org.eclipse.jetty.demo</groupId>
+      <artifactId>bar-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
