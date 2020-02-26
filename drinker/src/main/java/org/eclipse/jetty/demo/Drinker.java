@@ -1,27 +1,63 @@
 package org.eclipse.jetty.demo;
 
+import java.util.Optional;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Drinker
 {
+    private static final Logger LOG = LoggerFactory.getLogger(Drinker.class);
+
     public static void main(String[] args)
+    {
+        // demoIterateServices();
+        demoSelectServiceIgnoringErrors();
+    }
+
+    private static void demoSelectServiceIgnoringErrors()
+    {
+        Optional<BarService> service = ServiceLoader.load(BarService.class).stream()
+            .map((provider) ->
+            {
+                try
+                {
+                    return provider.get();
+                }
+                catch (ServiceConfigurationError error)
+                {
+                    LOG.warn("BarService failed to load", error);
+                }
+                return null;
+            })
+            .filter((bar) -> bar != null) // filter out empty / error services
+            .findFirst();
+
+        BarService barService = service.orElseThrow(() -> new IllegalStateException("Unable to find a BarService"));
+        LOG.info("Using Service ({}) is type [{}]", barService.getClass().getName(), barService.getType());
+    }
+
+    private static void demoIterateServices()
     {
         ServiceLoader.load(BarService.class).stream().forEach((barProvider) ->
         {
             try
             {
-                BarService service = barProvider.get();
-                if (service == null)
+                BarService barService = barProvider.get();
+                if (barService == null)
                 {
-                    System.out.println("No service found.");
+                    LOG.warn("BarService returned null");
                 }
-                System.out.printf("Service (%s) is type %s%n", service.getClass().getName(), service.getType());
+                else
+                {
+                    LOG.info("Using Service ({}) is type [{}]", barService.getClass().getName(), barService.getType());
+                }
             }
             catch (ServiceConfigurationError error)
             {
-                System.out.printf("Service failed to load: %s%n", error.getMessage());
-                error.getCause().printStackTrace(System.out);
+                LOG.warn("BarService failed to load", error);
             }
         });
     }
