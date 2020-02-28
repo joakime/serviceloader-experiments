@@ -38,5 +38,32 @@
       <artifactId>dive-bar</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.demo</groupId>
+      <artifactId>dependent-bar</artifactId>
+      <version>${project.version}</version>
+      <exclusions>
+        <!-- remove dependency to prevent service from loading -->
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.demo</groupId>
+      <artifactId>invalid-bar</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.demo</groupId>
+      <artifactId>needy-bar</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.demo</groupId>
+      <artifactId>no-such-bar</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

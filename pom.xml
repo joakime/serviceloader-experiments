@@ -22,7 +22,11 @@
     <module>fancy-bar</module>
     <module>dive-bar</module>
     <module>lost-their-license-bar</module>
+    <module>dependent-bar</module>
+    <module>invalid-bar</module>
+    <module>no-such-bar</module>
     <module>drinker</module>
+    <module>needy-bar</module>
   </modules>
 
   <dependencies>

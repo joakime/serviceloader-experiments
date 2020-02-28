@@ -1,5 +1,6 @@
 package org.eclipse.jetty.demo;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
@@ -14,7 +15,8 @@ public class Drinker
     public static void main(String[] args)
     {
         // demoIterateServices();
-        demoSelectServiceIgnoringErrors();
+        demoOldIteration();
+        // demoSelectServiceIgnoringErrors();
     }
 
     private static void demoSelectServiceIgnoringErrors()
@@ -62,5 +64,30 @@ public class Drinker
                 LOG.warn("BarService failed to load", error);
             }
         });
+    }
+
+    private static void demoOldIteration()
+    {
+        ServiceLoader serviceLoader = ServiceLoader.load(BarService.class);
+        Iterator<BarService> serviceIterator = serviceLoader.iterator();
+        while (serviceIterator.hasNext())
+        {
+            try
+            {
+                BarService barService = serviceIterator.next();
+                if (barService == null)
+                {
+                    LOG.warn("BarService returned null");
+                }
+                else
+                {
+                    LOG.info("Using Service ({}) is type [{}]", barService.getClass().getName(), barService.getType());
+                }
+            }
+            catch (ServiceConfigurationError error)
+            {
+                LOG.warn("BarService failed to load", error);
+            }
+        }
     }
 }
